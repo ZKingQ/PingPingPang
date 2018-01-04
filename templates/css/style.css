@@ -1,0 +1,9 @@
+body {
+    background-color: #F2F6FC;
+}
+
+#myCanvas {
+    background-color: #fff;
+    /*cursor: url("pointer.png"), auto;*/
+    cursor: url("cursor.png"), auto;
+}
