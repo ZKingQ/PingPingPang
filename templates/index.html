@@ -6,6 +6,13 @@
     <link href='css/style.css' rel='stylesheet'>
 </head>
 <body>
+<form>
+    <div class="title">Login</div>
+    <input id="URL" type="text" placeholder="The photo url">
+    <input id="SubmitURL" type="submit" value="Submit">
+</form>
+
+
 <canvas id='myCanvas' width='1280px' height='853px'>
 </canvas>
 <audio id="doubleKill">
@@ -29,10 +36,6 @@
 <audio id="bgmm" controls="controls" hidden="hidden" loop="loop">
     <source src="./music/girl/BGMM.mp3" type="audio/mpeg"/>
 </audio>
-<div>
-    <input id="URL" type="text" placeholder="使用网络图片,请粘贴图片URL">
-    <button id="SubmitURL">分析</button>
-</div>
 <script src='scripts/jQuery.js'></script>
 <script src='scripts/AI.js'></script>
 <script src='scripts/balls.js'></script>
