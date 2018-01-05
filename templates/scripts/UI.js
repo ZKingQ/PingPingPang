@@ -30,16 +30,22 @@ UI.prototype = {
         context.font = '20px monaco';
         context.fillStyle = this.color;
         // 检查游戏进程
-        if (balls.length > 100 || this.score < -5) {
+        if (balls.length > 50 || this.score < -5) {
             cancelAnimationFrame(animation);
             context.clearRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = 'black';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = 'white';
             context.font = '100px monaco';
+            context.textAlign = 'center';
             context.fillText('Game Over', canvas.width / 2, canvas.height / 2);
         }
-        else
+        else {
+            context.fillStyle = gender === 'man' ? '#409EFF' : '#F56C6C';
             context.fillText('score:' + this.score, this.x, this.y);
+
+        }
         if (gender === 'woman' && now - this.playTime > 1000) {
-            console.log("A");
             bgmm.pause();
         }
         context.restore();
@@ -49,7 +55,7 @@ UI.prototype = {
             this.display.push({
                 point: "Miss", loc: loc, color: "#E6A23C", font: "20px monaco", time: new Date()
             });
-            this.score -= Math.max(1, Math.round(this.score * 0.05));
+            this.score -= Math.max(1, Math.round(this.score * 0.05 * (100 - beauty) / 50));
             this.hit = 0;
         }
         else {

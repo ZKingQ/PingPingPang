@@ -6,15 +6,20 @@
     <link href='css/style.css' rel='stylesheet'>
 </head>
 <body>
-<form>
-    <div class="title">Login</div>
-    <input id="URL" type="text" placeholder="The photo url">
-    <input id="SubmitURL" type="submit" value="Submit">
-</form>
+<!--<h2 class="title">PingPing Pang</h2>-->
 
 
-<canvas id='myCanvas' width='1280px' height='853px'>
+<canvas id='myCanvas' width='1280px' height='714px'>
 </canvas>
+<div id="prePlay">
+    <form>
+        <input id="URL" type="text" placeholder="请填写网络图片的url">
+        <input id="SubmitURL" type="button" value="Play">
+    </form>
+</div>
+<div>
+    <output id='afterPlay'></output>
+</div>
 <audio id="doubleKill">
     <source src='./music/boy/doubleKill.mp3' type="audio/mp3">
 </audio>

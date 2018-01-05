@@ -12,34 +12,33 @@ let canvas = document.getElementById('myCanvas'),
     beauty, // 人工智能API返回值
     snows = [], //数组存放每一片雪花
     lastTime = new Date(),
-    lastTime1 = new Date(),
+    lastTime1 = new Date(), // 上一个雪花的时间
     back_image = new Image(),
     snow_image = new Image();
-back_image.src = './images/img.jpg';
 snow_image.src = './images/snow.jpg';
+back_image.src = './images/img.jpg';
 
 back_image.onload = function (e) {
     context.save();
-    context.globalAlpha = 0.7;
-    context.drawImage(back_image, 0, 0, canvas.width, canvas.height);
-    context.restore();
-    context.save();
     context.fillStyle = 'black';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = 'white';
     context.font = "33px Georgia";
     context.textAlign = 'center';
     let x = canvas.width / 2, y = 0.3 * canvas.height;
-    context.fillText("游戏中会有许多漂浮的小球，通过点击可以打破它们。", x, y);
-    context.fillText("通过下面的链接选择一张图片地址，随着游戏的进行，球的移动速度会越来越快", x, y + 50);
-    context.fillText("快去拯救地球吧！Hero！（请点击开始游戏", x, y + 100);
+    context.fillText("游戏中会有许多小球，通过点击可以打破它们", x, y);
+    context.fillText("选择一张图片并将其地址放在下面的输入框中", x, y + 50);
+    context.fillText("随着分数的提高，小球的移动速度会越来越快", x, y + 100);
+    // context.fillText("请点击开始游戏", x, y + 150);
     context.restore();
 };
 
 function randomBall() {
-    let radius = Math.random() * 60 + 30 - ui.difficulty * 3;
+    let radius = Math.max(Math.random() * 50 + 50 - ui.difficulty * 4, 20);
     let newBall = new Ball(radius);
     let flag = true, i = 0;
     while (flag) {
-        if (++i > 100) return;
+        if (++i > 1000) return false;
         newBall.x = Math.random() * canvas.width;
         newBall.y = Math.random() * canvas.height;
         flag = false;
@@ -49,9 +48,10 @@ function randomBall() {
                 flag = true;
         });
     }
-    newBall.vx = Math.random() * 5 + ui.difficulty / 2;
-    newBall.vy = Math.random() * 5 + ui.difficulty / 2;
+    newBall.vx = Math.random() * 2 + ui.difficulty / 2;
+    newBall.vy = Math.random() * 2 + ui.difficulty / 2;
     balls.push(newBall);
+    return true;
 }
 
 // 墙面碰撞检测
@@ -137,13 +137,16 @@ function move(ball) {
     checkWalls(ball);
 }
 
-// 气泡绘制
+// 气泡绘制与消除超时气泡
 function drawBalls(ball, index) {
     if (ball.radius > 20) {
         ball.radius -= 0.02;
+        ball.createTime = now;
     }
-    else if (now - ball.createTime > 20000)
+    else if (now - ball.createTime > 20000) {
         balls.splice(index, 1);
+        --ui.score;
+    }
     // if (ball.radius <= 0) {
     //     balls.splice(index, 1);
     //     --ui.score;
@@ -160,9 +163,9 @@ function createThings() {
         snows.push(snow);
         lastTime = now;
     }
-    if (now - lastTime1 > balls.length * 50 + 300 && balls.length < 100) {
-        randomBall();
-        lastTime1 = now;
+    if (now - lastTime1 > balls.length * 30 + 300 && balls.length < 100) {
+        if (randomBall())
+            lastTime1 = now;
     }
 }
 
@@ -180,7 +183,7 @@ function drawFrame() {
     let animation = requestAnimationFrame(drawFrame);
     now = new Date();
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(snow_image, 0, 0, canvas.width, canvas.height);
+    context.drawImage(gender === 'man' ? snow_image : back_image, 0, 0, canvas.width, canvas.height);
     createThings();
     snows.forEach(drawSnow);
     balls.forEach(move);
@@ -226,8 +229,11 @@ function clickBall(ev) {
 
 // 游戏开始
 function init() {
+    console.log('性别: ' + gender, '颜值: ' + beauty);
+    document.getElementById('prePlay').style.display = 'none';
+
     let ballsNum = Math.round(10 - beauty / 10);
-    if(gender === 'man') {
+    if (gender === 'man') {
         bgm.play();
     }
     canvas.addEventListener('mousedown', clickBall);
