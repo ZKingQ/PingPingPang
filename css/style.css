@@ -1,0 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    background-color: black;
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
